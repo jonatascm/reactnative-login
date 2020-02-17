@@ -28,7 +28,5 @@ Basic Login Page
 
 ## PrintScreens
 
-<img src="src/assets/login.jpg" alt="Login Screen" width="200" height="300">
-
-<img src="src/assets/register.jpg" alt="Register Screen" width="200" height="300">
+<img src="src/assets/login.jpg" alt="Login Screen" width="200" height="300"><img src="src/assets/register.jpg" alt="Register Screen" width="200" height="300">
 
