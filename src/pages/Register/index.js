@@ -18,6 +18,10 @@ export default function Register({navigation}) {
   const [passConfirm, setPassConfirm] = useState('');
   const [keyboard, setKeyboard] = useState(true);
   const [logoSize] = useState(new Animated.ValueXY({x: 150, y: 150}));
+  const [userErr, setUserErr] = useState(false);
+  const [emailErr, setEmailErr] = useState(false);
+  const [passErr, setPassErr] = useState(false);
+  const [passConfirmErr, setPassConfirmErr] = useState(false);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', () => {
@@ -47,12 +51,42 @@ export default function Register({navigation}) {
         }),
       ]).start();
     });
-
-    return () => {
-      Keyboard.removeAllListeners('keyboardDidShow', () => setKeyboard(false));
-      Keyboard.removeAllListeners('keyboardDidHide', () => setKeyboard(true));
-    };
   }, [logoSize.x, logoSize.y]);
+
+  function onCreate() {
+    let err = false;
+
+    if (user === '') {
+      err = true;
+      setUserErr(true);
+    } else {
+      setUserErr(false);
+    }
+
+    if (email === '') {
+      err = true;
+      setEmailErr(true);
+    } else {
+      setEmailErr(false);
+    }
+
+    if (pass === '') {
+      err = true;
+      setPassErr(true);
+    } else {
+      if (pass != passConfirm) {
+        err = true;
+        setPassConfirmErr(true);
+      } else {
+        setPassConfirmErr(false);
+      }
+      setPassErr(false);
+    }
+
+    if (err) {
+      return;
+    }
+  }
 
   return (
     <>
@@ -62,42 +96,64 @@ export default function Register({navigation}) {
           source={logo}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, userErr ? styles.inputErr : null]}
           value={user}
-          onChange={e => setUser(e.target.value)}
+          onChange={event => {
+            setUser(event.nativeEvent.text);
+            setUserErr(false);
+          }}
           placeholder="Usuário"
           placeholderTextColor="#eee"
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid={'transparent'}
+          autoCapitalize={'none'}
         />
+        {userErr ? <Text style={styles.textErr}>Usuário invalido</Text> : null}
         <TextInput
-          style={styles.input}
+          style={[styles.input, emailErr ? styles.inputErr : null]}
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={event => {
+            setEmail(event.nativeEvent.text);
+            setEmailErr(false);
+          }}
           placeholder="Email"
           placeholderTextColor="#eee"
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid={'transparent'}
+          autoCapitalize={'none'}
         />
+        {emailErr ? <Text style={styles.textErr}>Email invalido</Text> : null}
         <TextInput
-          style={styles.input}
+          style={[styles.input, passErr ? styles.inputErr : null]}
           value={pass}
-          onChange={e => setPass(e.target.value)}
+          onChange={event => {
+            setPass(event.nativeEvent.text);
+            setPassErr(false);
+          }}
           placeholder="Senha"
           placeholderTextColor="#eee"
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid={'transparent'}
+          autoCapitalize={'none'}
         />
+        {passErr ? <Text style={styles.textErr}>Senha invalida</Text> : null}
         <TextInput
-          style={styles.input}
+          style={[styles.input, passConfirmErr ? styles.inputErr : null]}
           value={passConfirm}
-          onChange={e => setPassConfirm(e.target.value)}
-          placeholder="Usuário"
+          onChange={event => {
+            setPassConfirm(event.nativeEvent.text);
+            setPassConfirmErr(false);
+          }}
+          placeholder="Respetir Senha"
           placeholderTextColor="#eee"
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid={'transparent'}
+          autoCapitalize={'none'}
         />
-        <TouchableOpacity style={styles.createButton}>
+        {passConfirmErr ? (
+          <Text style={styles.textErr}>Senhas diferentes</Text>
+        ) : null}
+        <TouchableOpacity style={styles.createButton} onPress={onCreate}>
           <Text style={styles.createText}>CRIAR CONTA</Text>
         </TouchableOpacity>
       </View>

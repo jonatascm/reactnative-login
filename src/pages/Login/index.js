@@ -17,7 +17,7 @@ export default function Login({navigation}) {
   const [pass, setPass] = useState('');
   const [keyboard, setKeyboard] = useState(false);
   const [loginErr, setLoginErr] = useState(false);
-  const [passErr, setPassErr] = useState(true);
+  const [passErr, setPassErr] = useState(false);
   const [logoSize] = useState(new Animated.ValueXY({x: 150, y: 150}));
 
   useEffect(() => {
@@ -53,14 +53,14 @@ export default function Login({navigation}) {
   function onLogin() {
     let err = false;
 
-    if (login == '') {
+    if (login === '') {
       err = true;
       setLoginErr(true);
     } else {
       setLoginErr(false);
     }
 
-    if (pass == '') {
+    if (pass === '') {
       err = true;
       setPassErr(true);
     } else {
@@ -68,10 +68,8 @@ export default function Login({navigation}) {
     }
 
     if (err) {
-      console.log('ERRO');
       return;
     }
-    console.log('Teste');
   }
 
   return (
@@ -109,19 +107,26 @@ export default function Login({navigation}) {
           <View style={styles.line} />
         </View>
         <TextInput
-          style={styles.input}
+          style={[styles.input, loginErr ? styles.inputErr : null]}
           value={login}
-          onChange={event => setLogin(event.nativeEvent.text)}
+          onChange={event => {
+            setLogin(event.nativeEvent.text);
+            setLoginErr(false);
+          }}
           placeholder="Usuário ou Email"
           placeholderTextColor="#eee"
           autoCorrect={false}
           underlineColorAndroid={'transparent'}
           autoCapitalize={'none'}
         />
+        {loginErr ? <Text style={styles.textErr}>Login invalido</Text> : null}
         <TextInput
-          style={styles.input}
+          style={[styles.input, passErr ? styles.inputErr : null]}
           value={pass}
-          onChange={event => setPass(event.nativeEvent.text)}
+          onChange={event => {
+            setPass(event.nativeEvent.text);
+            setPassErr(false);
+          }}
           placeholder="Senha"
           placeholderTextColor="#eee"
           autoCorrect={false}
@@ -129,6 +134,7 @@ export default function Login({navigation}) {
           autoCapitalize={'none'}
           secureTextEntry={true}
         />
+        {passErr ? <Text style={styles.textErr}>Senha invalida</Text> : null}
         <TouchableOpacity style={styles.loginButton} onPress={onLogin}>
           <Text style={styles.loginText}>ENTRAR</Text>
         </TouchableOpacity>

@@ -9,10 +9,10 @@
 </p>
 
 
-# :muscle: Login Page
+# :blue_book: Login Page
 Basic Login Page
  
-# :computer: React-Native
+# :iphone: React-Native
 
 ## Description:
 * Static login and register screens
